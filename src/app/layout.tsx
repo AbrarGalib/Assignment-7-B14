@@ -4,7 +4,7 @@ import "./globals.css";
 
 // Import your components
 import Navbar from "@/components/Navbar";
-// import Footer from "@/components/Footer";
+import Footer from "@/components/Footer";
 
 // Import Toastify for notifications
 import { ToastContainer } from "react-toastify";
@@ -36,7 +36,7 @@ export default function RootLayout({
         </main>
         
         {/* Footer shows on every page */}
-        {/* <Footer /> */}
+        <Footer />
         
         {/* Toast Container for pop-up notifications */}
         <ToastContainer position="bottom-right" theme="colored" />
