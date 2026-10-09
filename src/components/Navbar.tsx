@@ -10,25 +10,24 @@ export default function Navbar() {
     email: "rezwanahmed@gmail.com"
   });
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [categories, setCategories] = useState<any[]>([]);
   const [tickerItems, setTickerItems] = useState<any[]>([]);
 
   useEffect(() => {
+    // 2. Fetch the products for the ticker
     fetch("https://api.abcz.workers.dev/api/bazardor/products")
       .then(res => res.json())
       .then(data => setTickerItems(data.slice(0, 8)))
       .catch(err => console.error(err));
+
+    // 3. Fetch the real categories from the API!
+    fetch("https://api.abcz.workers.dev/api/bazardor/categories")
+      .then(res => res.json())
+      .then(data => setCategories(data))
+      .catch(err => console.error(err));
   }, []);
 
-  const categories = [
-    { name: "চাল", slug: "chal" },
-    { name: "ডাল", slug: "dal" },
-    { name: "তেল", slug: "oil" },
-    { name: "সবজি", slug: "vegetables" },
-    { name: "মাছ", slug: "fish" },
-    { name: "মাংস", slug: "meat" },
-    { name: "ডিম-দুধ", slug: "dairy" },
-    { name: "মসলা", slug: "spices" },
-  ];
+
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -86,11 +85,12 @@ export default function Navbar() {
               <Link 
                 key={cat.slug} 
                 href={`/category/${cat.slug}`}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all flex items-center gap-2 ${
                   isActive ? "bg-emerald-600 text-white shadow" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
-                {cat.name}
+                <span>{cat.icon}</span>
+                {cat.nameBn}
               </Link>
             );
           })}
@@ -102,11 +102,11 @@ export default function Navbar() {
         <div className="inline-flex animate-marquee gap-8 text-sm text-gray-700">
           {tickerItems.map((item, idx) => (
             <div key={idx} className="flex items-center gap-2 px-3">
-              <span>{item.emoji}</span>
-              <span className="font-semibold">{item.name}</span>
-              <span>{item.price} টাকা/{item.unit}</span>
-              <span className={item.change >= 0 ? "text-red-600 font-bold" : "text-emerald-600 font-bold"}>
-                {item.change >= 0 ? `▲ ${item.change}%` : `▼ ${Math.abs(item.change)}%`}
+              <span>{item.image}</span>
+              <span className="font-semibold">{item.nameBn}</span>
+              <span>{item.today} টাকা/{item.unit}</span>
+              <span className={item.change?.dir === 'up' ? "text-red-600 font-bold" : item.change?.dir === 'down' ? "text-emerald-600 font-bold" : "text-gray-500 font-bold"}>
+                {item.change?.dir === 'up' ? `▲ ${item.change.pct}%` : item.change?.dir === 'down' ? `▼ ${item.change.pct}%` : `— ${item.change?.pct || 0}%`}
               </span>
             </div>
           ))}
