@@ -1,25 +1,27 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useParams } from "next/navigation";
 import { fetchProducts } from "@/services/api";
 import Link from "next/link";
 
-export default function CategoryPage() {
+// 1. Move into sub-component
+function CategoryPageContent() {
   const { slug } = useParams();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState<string>("default");
 
   useEffect(() => {
-    fetchProducts(slug as string)
-      .then(data => {
-        setProducts(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    if (slug) {
+      fetchProducts(slug as string)
+        .then(data => {
+          setProducts(data);
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
+    }
   }, [slug]);
 
-  // Sort logic based on the updated 'today' property from the API
   const sortedProducts = [...products].sort((a, b) => {
     if (sortOrder === "low-to-high") return Number(a.today) - Number(b.today);
     if (sortOrder === "high-to-low") return Number(b.today) - Number(a.today);
@@ -71,7 +73,7 @@ export default function CategoryPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sortedProducts.map(p => (
-            <Link key={p.id} href={`/product/${p.id}`} className="bg-white border border-gray-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition flex flex-col justify-between">
+            <Link key={p.id} href={`/product/${p.slug || p.id}`} className="bg-white border border-gray-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition flex flex-col justify-between">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-4xl bg-gray-50 p-3 rounded-2xl">{p.image || "📦"}</span>
                 <div>
@@ -95,5 +97,18 @@ export default function CategoryPage() {
         </div>
       )}
     </div>
+  );
+}
+
+// 2. Wrap it in Suspense to prevent Vercel build errors!
+export default function CategoryPage() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-7xl mx-auto px-4 py-24 text-center">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-emerald-600 border-t-transparent"></div>
+      </div>
+    }>
+      <CategoryPageContent />
+    </Suspense>
   );
 }

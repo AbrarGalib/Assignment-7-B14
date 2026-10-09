@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { fetchProductById } from "@/services/api";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-toastify";
 
-export default function ProductDetails() {
+// 1. We move your code into a sub-component
+function ProductDetailsContent() {
   const { slug } = useParams();
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
@@ -110,5 +111,18 @@ export default function ProductDetails() {
         </div>
       </div>
     </div>
+  );
+}
+
+// 2. We wrap it in Suspense to prevent Vercel build errors!
+export default function ProductDetails() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-7xl mx-auto px-4 py-24 text-center">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-emerald-600 border-t-transparent"></div>
+      </div>
+    }>
+      <ProductDetailsContent />
+    </Suspense>
   );
 }
