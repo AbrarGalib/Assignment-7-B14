@@ -1,33 +1,46 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { authClient } from "@/lib/auth-client"; 
+import { toast } from "react-toastify";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [user, setUser] = useState<{ name: string; email: string } | null>({
-    name: "Rezwan Ahmed",
-    email: "rezwanahmed@gmail.com"
-  });
+  const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  
   const [categories, setCategories] = useState<any[]>([]);
   const [tickerItems, setTickerItems] = useState<any[]>([]);
 
+  // Fetch the real user session from Better Auth
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user; 
+
   useEffect(() => {
-    // 2. Fetch the products for the ticker
+    // Fetch the products for the ticker
     fetch("https://api.abcz.workers.dev/api/bazardor/products")
       .then(res => res.json())
       .then(data => setTickerItems(data.slice(0, 8)))
       .catch(err => console.error(err));
 
-    // 3. Fetch the real categories from the API!
+    // Fetch the real categories from the API
     fetch("https://api.abcz.workers.dev/api/bazardor/categories")
       .then(res => res.json())
       .then(data => setCategories(data))
       .catch(err => console.error(err));
   }, []);
 
-
+  const handleSignOut = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          toast.success("সফলভাবে সাইন আউট হয়েছেন!");
+          router.push("/signin");
+        },
+      },
+    });
+  };
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -43,13 +56,19 @@ export default function Navbar() {
 
         {/* Auth / Profile Section */}
         <div className="relative">
-          {user ? (
+          {isPending ? (
+            <div className="animate-pulse bg-gray-200 h-8 w-24 rounded-xl"></div>
+          ) : user ? (
             <div>
               <button 
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="flex items-center gap-2 font-medium text-gray-800 hover:text-emerald-600"
               >
-                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="avatar" className="w-9 h-9 rounded-full object-cover" />
+                <img 
+                  src={user.image || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"} 
+                  alt="avatar" 
+                  className="w-9 h-9 rounded-full object-cover" 
+                />
                 <span>{user.name}</span>
                 <span>▾</span>
               </button>
@@ -61,7 +80,10 @@ export default function Navbar() {
                   <Link href="/profile" className="flex items-center gap-2 text-sm text-gray-700 py-2 hover:text-emerald-600">
                     👤 আমার প্রোফাইল
                   </Link>
-                  <button onClick={() => setUser(null)} className="w-full text-left text-sm text-red-600 py-2 hover:bg-red-50 rounded px-1">
+                  <button 
+                    onClick={handleSignOut} 
+                    className="w-full text-left text-sm text-red-600 py-2 hover:bg-red-50 rounded px-1"
+                  >
                     ↩ সাইন আউট
                   </button>
                 </div>
