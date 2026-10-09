@@ -24,16 +24,25 @@ export default function Home() {
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-12">
       {/* Hero Section */}
       <div className="bg-gray-50 border border-gray-200 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
-        <div className="space-y-4 max-w-xl">
+        <div className="space-y-6 max-w-xl">
           <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">আজকের বাজার</span>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">আজকের বাজারের দাম এক নজরে</h1>
-          <p className="text-gray-600">চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম ও মসলার দাম — বাজারভিত্তিক বিস্তারিত, গড়, সর্বনিম্ন, সর্বাধিক এবং দামের পরিবর্তন এক জায়গায়।</p>
+          <p className="text-gray-600 text-lg">চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম ও মসলার দাম — বাজারভিত্তিক বিস্তারিত, গড়, সর্বনিম্ন, সর্বাধিক এবং দামের পরিবর্তন এক জায়গায়।</p>
           <button 
             onClick={() => document.getElementById("all-products")?.scrollIntoView({ behavior: "smooth" })}
             className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-2xl shadow transition"
           >
             সব পণ্য দেখুন
           </button>
+        </div>
+        
+        {/* Added Hero Image */}
+        <div className="w-full md:w-1/2 flex justify-center md:justify-end">
+          <img 
+            src="/assets/bazar-hero.png" 
+            alt="বাজার দর" 
+            className="w-full max-w-sm md:max-w-md lg:max-w-lg object-contain drop-shadow-sm"
+          />
         </div>
       </div>
 
