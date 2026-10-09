@@ -1,36 +1,25 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Project name
+⇾ বাজার দর (Bazar Dor)
 
-## Getting Started
+Description
+⇾ Bazar Dor is a simple web application that tracks the daily market prices of essential food items in Bangladesh. It helps users easily check the lowest, highest, and average prices of daily commodities.
 
-First, run the development server:
+Technologies Used
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+⇾ Next.js (App Router)
+⇾ Tailwind CSS
+⇾ MongoDB
+⇾ Better Auth
+⇾ React Toastify
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5 Key Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Live Price Ticker: A scrolling text at the top showing the latest product prices and daily changes.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. User Authentication: Secure Sign In and Sign Up system, including Google and GitHub login options.
 
-## Learn More
+3. Protected Routes: Only logged-in users can view the detailed market breakdown for each specific product.
 
-To learn more about Next.js, take a look at the following resources:
+4. Category Sorting: Users can view products by category (like vegetables or meat) and sort them from lowest to highest price.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. Responsive Design: The website automatically adjusts and works perfectly on mobile phones, tablets, and desktop computers.
